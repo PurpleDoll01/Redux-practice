@@ -26,14 +26,14 @@ class Publicaciones extends Component {
             return;
         }
         if (!('publicaciones_key' in this.props.usuariosReducer.usuarios[key])) {
-            publicacionesTraerPorUsuario(key);
-        }  
-        //Todo esto lo hacemos para verificar si users tiene el atributo de publicaciones_key, esto nos dice si ya este usuario hizo la llamada a sus posts. 
+            await publicacionesTraerPorUsuario(key);
+        }
+        //Todo esto lo hacemos para verificar si users tiene el atributo de publicaciones_key, esto nos dice si ya este usuario hizo la llamada a sus posts.
     }
 
     ponerUsuario = () => {
-        const { 
-            usuariosReducer, 
+        const {
+            usuariosReducer,
             match: { params: { key } }
         } = this.props; // No se podía destructurar el reducer en el didmount ya que es el que manera el estado, en el render ya se puede hacer
 
@@ -63,19 +63,38 @@ class Publicaciones extends Component {
             match: { params: { key } }
         } = this.props;
 
+        console.log({'datosss': publicaciones});
+
         if (!usuarios.length) return; //Aquí no se hace nada porque se está haciendo en ponerUsuarios, igual abajo. HUh
         if(usuariosReducer.error) return;
         if(publicacionesReducer.cargando) {
             return <Spinner />
         }
+        if (publicacionesReducer.error) {
+            return <Fatal mensaje={publicacionesReducer.error} />
+        }
+        if (!publicaciones.length) return;
+
+        const { publicaciones_key } = usuarios[key];
+
+        return publicaciones[publicaciones_key].map((publicacion) => (
+            <div className='pub_titulo'>
+                <h2>
+                    { publicacion.title }
+                </h2>
+                <h3>
+                    { publicacion.body }
+                </h3>
+            </div>
+        ));
     }
- 
+
     render() {
         console.log(this.props)
         return (
             <div>
-               { this.ponerUsuario() }  
-               { this.ponerPublicaciones() }              
+               { this.ponerUsuario() }
+               { this.ponerPublicaciones() }
             </div>
         );
     }

@@ -1,27 +1,27 @@
 .margen {
     margin: 100px;
   }
-  
+
   .tabla {
     width: 100%;
-    text-align: left; 
+    text-align: left;
   }
-  
+
   .tabla td {
     padding: 10px 0;
   }
-  
+
   #menu {
     background-color: #253a46;
     padding: 20px;
     font-size: 20px;
   }
-  
+
   #menu a {
     color: white;
     padding-right: 50px;
   }
-  
+
   body {
     margin: 0;
   }
@@ -32,4 +32,8 @@
 
   .rojo {
     color: red;
+  }
+
+  .pub_titulo {
+    border-top: 1px solid black;
   }

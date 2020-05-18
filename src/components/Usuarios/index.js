@@ -12,7 +12,7 @@ class Usuarios extends Component {
     if( !this.props.usuarios.length) {
       this.props.traerTodos(); //Esta funcion viene de usuariosActions
     }
-  } 
+  }
 
   ponerContenido = () => {
     if (this.props.cargando) {
@@ -26,12 +26,12 @@ class Usuarios extends Component {
     return <Tabla/>;
   };
 
-  render() { 
+  render() {
     return (
       <div>
         <h1>Usuarios</h1>
         { this.ponerContenido() }
-      </div>   
+      </div>
     );
   }
 }
@@ -40,5 +40,5 @@ const mapStateToProps = (reducers) => {
     return reducers.usuariosReducer;
 }; //Siempre se reciben todos los reducers
 
-export default connect(mapStateToProps, usuariosActions)(Usuarios); 
-//Esta línea permite que el componente Usuarios se conecte a Redux. El primer parámetro son todos los reducers que el proveedor le entregará al componente. El segundo parámetro son todas las acciones 
+export default connect(mapStateToProps, usuariosActions)(Usuarios);
+//Esta línea permite que el componente Usuarios se conecte a Redux. El primer parámetro son todos los reducers que el proveedor le entregará al componente. El segundo parámetro son todas las acciones
