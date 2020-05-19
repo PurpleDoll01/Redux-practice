@@ -63,8 +63,6 @@ class Publicaciones extends Component {
             match: { params: { key } }
         } = this.props;
 
-        console.log({'datosss': publicaciones});
-
         if (!usuarios.length) return; //Aquí no se hace nada porque se está haciendo en ponerUsuarios, igual abajo. HUh
         if(usuariosReducer.error) return;
         if(publicacionesReducer.cargando) {
@@ -77,8 +75,14 @@ class Publicaciones extends Component {
 
         const { publicaciones_key } = usuarios[key];
 
+        if (!publicaciones[publicaciones_key]) return <Spinner />;
+
         return publicaciones[publicaciones_key].map((publicacion) => (
-            <div className='pub_titulo'>
+            <div
+                className='pub_titulo'
+                key={ publicacion.id }
+                onClick={ () => alert(publicacion.id) }
+            >
                 <h2>
                     { publicacion.title }
                 </h2>
