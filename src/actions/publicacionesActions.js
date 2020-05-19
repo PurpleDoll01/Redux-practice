@@ -57,7 +57,6 @@ export const traerPorUsuario = (key) => async (dispatch, getState) => {
 
 export const abrirCerrar = (pub_key, com_key) => (dispatch, getState) => {
     const { publicaciones } = getState().publicacionesReducer;
-    const seleccionada = publicaciones[pub_key][com_key];
 
     /*const actualizada = {
         ...seleccionada,
@@ -88,15 +87,37 @@ export const abrirCerrar = (pub_key, com_key) => (dispatch, getState) => {
         ...publicaciones.slice((pub_key + 1))
     ]
 
-    console.log({'seleccionada': seleccionada})
-    console.log({'publicaciones2': publicaciones_actualizadas})
-
     dispatch({
         type: ACTUALIZAR,
         payload: publicaciones_actualizadas,
     })
 }
 
-export const traerComentarios = (pub_key, com_key) => (dispatch, getState) => {
+export const traerComentarios = (pub_key, com_key) => async (dispatch, getState) => {
+    const { publicaciones } = getState().publicacionesReducer;
+    const seleccionada = publicaciones[pub_key][com_key];
 
+    const respuesta = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${seleccionada.id}`);
+
+    const publicaciones_actualizadas = [
+        ...publicaciones.slice(0, pub_key),
+        ...[
+            [
+            ...publicaciones[pub_key].slice(0, com_key),
+            ...[
+                {
+                  ...publicaciones[pub_key][com_key],
+                  comentarios: respuesta.data
+                },
+            ...publicaciones[pub_key].slice((com_key + 1))
+            ]
+           ]
+        ],
+        ...publicaciones.slice((pub_key + 1))
+    ];
+
+    dispatch({
+        type: ACTUALIZAR,
+        payload: publicaciones_actualizadas,
+    })
 };
