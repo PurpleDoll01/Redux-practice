@@ -1,4 +1,4 @@
-import { TRAER_POR_USUARIO, CARGANDO, ERROR } from '../types/publicacionesTypes';
+import { ACTUALIZAR, CARGANDO, ERROR } from '../types/publicacionesTypes';
 import * as usuariosTypes from '../types/usuariosTypes';
 
 import axios from 'axios';
@@ -29,7 +29,7 @@ export const traerPorUsuario = (key) => async (dispatch, getState) => {
         ];
 
         dispatch({
-            type: TRAER_POR_USUARIO,
+            type: ACTUALIZAR,
             payload: publicaciones_actualizadas
         })
 
@@ -55,6 +55,44 @@ export const traerPorUsuario = (key) => async (dispatch, getState) => {
     }
 }
 
-export const abrirCerrar = (pub_key, com_key) => (dispatch) => {
-    console.log(pub_key, com_key);
+export const abrirCerrar = (pub_key, com_key) => (dispatch, getState) => {
+    const { publicaciones } = getState().publicacionesReducer;
+    const seleccionada = publicaciones[pub_key][com_key];
+
+    /*const actualizada = {
+        ...seleccionada,
+        abierto: !seleccionada.abierto,
+    };
+
+    const publicaciones_actualizadas = [...publicaciones];
+    publicaciones_actualizadas[pub_key] = [
+        ...publicaciones[pub_key]
+    ]
+
+    publicaciones_actualizadas[pub_key][com_key] = actualizada; */
+
+    const publicaciones_actualizadas = [
+        ...publicaciones.slice(0, pub_key),
+        ...[
+            [
+            ...publicaciones[pub_key].slice(0, com_key),
+            ...[
+                {
+                  ...publicaciones[pub_key][com_key],
+                  abierto: !publicaciones[pub_key][com_key].abierto
+                },
+            ...publicaciones[pub_key].slice((com_key + 1))
+            ]
+           ]
+        ],
+        ...publicaciones.slice((pub_key + 1))
+    ]
+
+    console.log({'seleccionada': seleccionada})
+    console.log({'publicaciones2': publicaciones_actualizadas})
+
+    dispatch({
+        type: ACTUALIZAR,
+        payload: publicaciones_actualizadas,
+    })
 }
