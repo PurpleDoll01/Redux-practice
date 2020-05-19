@@ -1,4 +1,4 @@
-import { ACTUALIZAR, CARGANDO, ERROR } from '../types/publicacionesTypes';
+import { ACTUALIZAR, CARGANDO, ERROR, COM_CARGANDO, COM_ERROR } from '../types/publicacionesTypes';
 import * as usuariosTypes from '../types/usuariosTypes';
 
 import axios from 'axios';
@@ -94,30 +94,41 @@ export const abrirCerrar = (pub_key, com_key) => (dispatch, getState) => {
 }
 
 export const traerComentarios = (pub_key, com_key) => async (dispatch, getState) => {
+    dispatch({
+        type: COM_CARGANDO
+    });
     const { publicaciones } = getState().publicacionesReducer;
     const seleccionada = publicaciones[pub_key][com_key];
 
-    const respuesta = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${seleccionada.id}`);
+    try {
+        const respuesta = await axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${seleccionada.id}`);
 
-    const publicaciones_actualizadas = [
-        ...publicaciones.slice(0, pub_key),
-        ...[
-            [
-            ...publicaciones[pub_key].slice(0, com_key),
+        const publicaciones_actualizadas = [
+            ...publicaciones.slice(0, pub_key),
             ...[
-                {
-                  ...publicaciones[pub_key][com_key],
-                  comentarios: respuesta.data
-                },
-            ...publicaciones[pub_key].slice((com_key + 1))
+                [
+                ...publicaciones[pub_key].slice(0, com_key),
+                ...[
+                    {
+                    ...publicaciones[pub_key][com_key],
+                    comentarios: respuesta.data
+                    },
+                ...publicaciones[pub_key].slice((com_key + 1))
+                ]
             ]
-           ]
-        ],
-        ...publicaciones.slice((pub_key + 1))
-    ];
+            ],
+            ...publicaciones.slice((pub_key + 1))
+        ];
 
-    dispatch({
-        type: ACTUALIZAR,
-        payload: publicaciones_actualizadas,
-    })
+        dispatch({
+            type: ACTUALIZAR,
+            payload: publicaciones_actualizadas,
+        })
+    } catch(error) {
+        console.log(error.message);
+        dispatch({
+            type: COM_ERROR,
+            payload: 'Comentarios no disponibles'
+        });
+    }
 };
