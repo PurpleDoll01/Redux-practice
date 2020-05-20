@@ -1,4 +1,4 @@
-import { ACTUALIZAR, CARGANDO, ERROR, COM_CARGANDO, COM_ERROR } from '../types/publicacionesTypes';
+import { ACTUALIZAR, COM_ACTUALIZAR, CARGANDO, ERROR, COM_CARGANDO, COM_ERROR } from '../types/publicacionesTypes';
 import * as usuariosTypes from '../types/usuariosTypes';
 
 import axios from 'axios';
@@ -121,7 +121,7 @@ export const traerComentarios = (pub_key, com_key) => async (dispatch, getState)
         ];
 
         dispatch({
-            type: ACTUALIZAR,
+            type: COM_ACTUALIZAR,
             payload: publicaciones_actualizadas,
         })
     } catch(error) {
