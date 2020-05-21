@@ -118,4 +118,25 @@ export const cambioCheck = (usu_id, tar_id) => (dispatch, getState) => {
     })
 };
 
+export const eliminar = (tar_id) => async (dispatch) => {
+    dispatch({
+        type: CARGANDO
+    });
+
+    try {
+        const respuesta = await axios.delete(`https://jsonplaceholder.typicode.com/todos/${tar_id}`);
+        console.log(respuesta);
+
+        dispatch({
+            type: TRAER_TODAS,
+            payload: {}
+        });
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: 'Pos no se pudo carnal'
+        })
+    }
+}
+
 //El dispatch es el que despacha la llamada y contacta al reducer
