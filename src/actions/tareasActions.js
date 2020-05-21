@@ -6,7 +6,8 @@ import {
     CAMBIO_USUARIO_ID,
     CAMBIO_TITULO,
     GUARDAR,
-    ACTUALIZAR
+    ACTUALIZAR,
+    LIMPIAR
 } from '../types/tareasTypes';
 
 export const traerTodas = () => async (dispatch) => {
@@ -137,6 +138,12 @@ export const eliminar = (tar_id) => async (dispatch) => {
             payload: 'Pos no se pudo carnal'
         })
     }
+}
+
+export const limpiarForma = () => (dispatch) => {
+    dispatch({
+        type: LIMPIAR
+    })
 }
 
 //El dispatch es el que despacha la llamada y contacta al reducer
