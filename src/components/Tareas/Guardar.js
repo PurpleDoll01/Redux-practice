@@ -49,8 +49,12 @@ class Guardar extends Component {
     }
 
     render() {
+        console.log(this.props.regresar);
         return (
             <div>
+                {
+                    (this.props.regresar) ? <Redirect to='/tareas' /> : ''
+                }
                 <h1>
                     Guardar Tarea
                 </h1>
